@@ -254,7 +254,7 @@
       </svg>
 
       <div class="idle-text">
-        <strong>Drag &amp; drop files here</strong>
+        <strong>Drag &amp; drop or paste files here</strong>
         or click to browse
       </div>
 
@@ -411,6 +411,15 @@
         const files = Array.from(fileInput.files);
         if (files.length) handleFiles(files);
         fileInput.value = '';
+      });
+
+      // ── Paste ──────────────────────────────────────────────────────────
+      document.addEventListener('paste', function (e) {
+        const items = Array.from(e.clipboardData.items).filter(i => i.kind === 'file');
+        if (!items.length) return;
+        e.preventDefault();
+        const files = items.map(i => i.getAsFile()).filter(Boolean);
+        if (files.length) handleFiles(files);
       });
 
       // ── Upload logic ───────────────────────────────────────────────────
