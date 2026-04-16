@@ -488,9 +488,8 @@
 
         const encoded = encodeURIComponent(url);
         const services = [
-          () => fetch('https://clck.ru/--?url=' + encoded).then(r => r.text()),
-          () => fetch('https://tinyurl.com/api-create.php?url=' + encoded).then(r => r.text()),
           () => fetch('https://da.gd/shorten?url=' + encoded).then(r => r.text()),
+          () => fetch('https://tinyurl.com/api-create.php?url=' + encoded).then(r => r.text()),
         ];
 
         for (const call of services) {
