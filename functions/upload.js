@@ -65,7 +65,7 @@ export async function onRequestPost(context) {
         }
 
         return new Response(
-            JSON.stringify([{ 'src': `/file/${fileId}.${fileExtension}` }]),
+            JSON.stringify([{ 'src': `/file/${fileId}.${fileExtension}`, 'fallback': result.usedFallback || false }]),
             {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' }
@@ -117,7 +117,9 @@ async function sendToTelegram(formData, apiEndpoint, env, retryCount = 0) {
             const newFormData = new FormData();
             newFormData.append('chat_id', formData.get('chat_id'));
             newFormData.append('document', formData.get('photo'));
-            return await sendToTelegram(newFormData, 'sendDocument', env, retryCount + 1);
+            const fallbackResult = await sendToTelegram(newFormData, 'sendDocument', env, retryCount + 1);
+            if (fallbackResult.success) fallbackResult.usedFallback = true;
+            return fallbackResult;
         }
 
         return {
