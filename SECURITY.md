@@ -27,7 +27,7 @@ debug endpoints, authentication, dependencies, and secret leakage.
 
 ## Critical
 
-### C-1. Request metadata (including `Authorization`) forwarded to a hard-coded third-party Sentry project — **FIXED**
+### C-1. Request metadata (including `Authorization`) forwarded to a hard-coded third-party Sentry project — **FIXED (telemetry removed entirely)**
 
 `functions/utils/middleware.js` unconditionally (unless `disable_telemetry`
 was explicitly set) wrapped every request with a Sentry plugin whose DSN
@@ -49,23 +49,12 @@ owner of that domain could at any time dial the rate up to 1.0 and receive
 100% of the telemetry (and therefore 100% of the admin credentials of every
 Basic-auth-protected deployment of this project).
 
-**Fix:**
-
-- Telemetry is now **opt-in**. It runs only when `enable_telemetry=true` is
-  explicitly set as an environment variable (previously it ran unless
-  explicitly disabled).
-- The Sentry DSN is no longer hard-coded. Operators must supply
-  `SENTRY_DSN` themselves; otherwise telemetry is silently disabled.
-- A denylist redacts sensitive headers (`Authorization`,
-  `Proxy-Authorization`, `Cookie`, `Set-Cookie`, `X-API-Key`,
-  `X-Auth-Token`, `X-CSRF-Token`, and anything matching `x-api-*` or
-  `x-auth-*`) before they are sent to Sentry.
-- The remote sample-rate fetch is gated behind an explicit
-  `sampleRateUrl` env var rather than a hard-coded third-party URL.
-
-**Note:** this is a behaviour change. Deployments that relied on the
-default-on telemetry will no longer emit telemetry until they set
-`enable_telemetry=true` and `SENTRY_DSN`. This is intentional.
+**Fix:** telemetry has been **removed entirely**. `functions/utils/middleware.js`,
+`functions/api/_middleware.js`, and `functions/file/_middleware.js` have
+been deleted, the `errorHandling` / `telemetryData` calls removed from
+`functions/upload.js`, and the `@cloudflare/pages-plugin-sentry` and
+`@sentry/tracing` dependencies dropped from `package.json`. No request
+metadata is forwarded to any third party.
 
 ---
 

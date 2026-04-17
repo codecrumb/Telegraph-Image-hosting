@@ -4,10 +4,6 @@
     "test": "mocha",
     "start": "npx wrangler pages dev ./ --kv \"img_url\" --port 8080 --binding BASIC_USER=${BASIC_USER:-admin} --binding BASIC_PASS=${BASIC_PASS:-change-me-local-dev-only} --persist-to ./data"
   },
-  "dependencies": {
-    "@cloudflare/pages-plugin-sentry": "^1.1.3",
-    "@sentry/tracing": "^7.114.0"
-  },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "mocha": "^10.6.0",
