@@ -2,8 +2,6 @@
 
 Free Image Hosting solution, Flickr/imgur alternative. Using Cloudflare Pages and the Telegram Bot API (Telegram Channel).
 
-English|[中文](README-zh.md)
-
 > [!IMPORTANT]
 >
 > Since the original Telegraph API interface was closed by the official, you need to switch the upload channel to Telegram Channel. Please set `TG_Bot_Token` and `TG_Chat_ID` according to the deployment requirements in the documentation, otherwise the upload function will not work properly.
